@@ -1,0 +1,125 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>KredoBank PWA</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href='data:application/manifest+json,{
+        "name": "KredoBank — sandbox",
+        "short_name": "KredoBank",
+        "description": "Симулятор мобільного банку — демо/тестовий режим",
+        "start_url": ".",
+        "display": "standalone",
+        "orientation": "portrait",
+        "background_color": "#0F1724",
+        "theme_color": "#6A4CFF",
+        "icons": [
+            { "src": "https://www.gstatic.com/android/keyboard/emojikitchen/20201001/u1f916/u1f916_u1f4b8.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+            { "src": "https://www.gstatic.com/android/keyboard/emojikitchen/20201001/u1f916/u1f916_u1f4b8.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+        ]
+    }'>
+
+    <!-- Apple Specific Meta Tags for PWA -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="KredoBank">
+    <link rel="apple-touch-icon" href="https://www.gstatic.com/android/keyboard/emojikitchen/20201001/u1f916/u1f916_u1f4b8.png">
+
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+        -webkit-tap-highlight-color: transparent;
+      }
+      /* For Webkit-based browsers (Chrome, Safari) */
+      ::-webkit-scrollbar {
+        width: 0px;
+        height: 0px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: transparent;
+      }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.20.0",
+    "react/": "https://aistudiocdn.com/react@^19.1.1/",
+    "react": "https://aistudiocdn.com/react@^19.1.1",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
+    "recharts": "https://aistudiocdn.com/recharts@^3.2.1",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.544.0"
+  }
+}
+</script>
+</head>
+<body class="bg-white dark:bg-slate-900">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+    <script>
+        // Simple service worker for caching the app shell
+        if ('serviceWorker' in navigator) {
+            const swContent = `
+                const CACHE_NAME = 'kredobank-pwa-cache-v1';
+                const urlsToCache = [
+                    '/',
+                    '/index.html',
+                ];
+
+                self.addEventListener('install', event => {
+                    event.waitUntil(
+                        caches.open(CACHE_NAME)
+                            .then(cache => {
+                                console.log('Opened cache');
+                                return cache.addAll(urlsToCache);
+                            })
+                    );
+                });
+
+                self.addEventListener('fetch', event => {
+                    event.respondWith(
+                        caches.match(event.request)
+                            .then(response => {
+                                if (response) {
+                                    return response; // Serve from cache
+                                }
+                                return fetch(event.request); // Fetch from network
+                            })
+                    );
+                });
+
+                 self.addEventListener('push', event => {
+                    const data = event.data.json();
+                    self.registration.showNotification(data.title, {
+                        body: data.body,
+                        icon: 'https://www.gstatic.com/android/keyboard/emojikitchen/20201001/u1f916/u1f916_u1f4b8.png'
+                    });
+                });
+            `;
+            const swBlob = new Blob([swContent], { type: 'application/javascript' });
+            const swUrl = URL.createObjectURL(swBlob);
+
+            navigator.serviceWorker.register(swUrl)
+                .then(registration => {
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                }).catch(err => {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+        }
+    </script>
+</body>
+</html>

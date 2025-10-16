@@ -1,0 +1,5 @@
+{
+  "name": "KredoBank PWA",
+  "description": "An interactive PWA prototype of KredoBank, a mobile banking application, featuring simulated accounts, transactions, analytics, and offline capabilities. This app is for demonstration purposes and does not handle real currency.",
+  "requestFramePermissions": []
+}
