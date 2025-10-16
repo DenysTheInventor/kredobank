@@ -6,8 +6,8 @@ const AnalyticsChart: React.FC = () => {
     const { t, transactions } = useAppContext();
     const expenses = transactions.filter(tx => tx.type === 'expense');
 
-    // Fix: Explicitly type the initial value of the reduce accumulator to resolve cascading type errors.
-    const spendingByCategory = expenses.reduce((acc, tx) => {
+    // Fix: Explicitly type the accumulator 'acc' to ensure TypeScript correctly infers the return type of the reduce function.
+    const spendingByCategory = expenses.reduce((acc: Record<string, number>, tx) => {
         // Simple conversion for demo
         let amountInUAH = tx.amount;
         if (tx.currency === 'USD') amountInUAH = tx.amount * 39;
@@ -16,7 +16,7 @@ const AnalyticsChart: React.FC = () => {
         
         acc[tx.category] = (acc[tx.category] || 0) + Math.abs(amountInUAH);
         return acc;
-    }, {} as Record<string, number>);
+    }, {});
 
     // Fix: Add explicit types for reduce callback parameters and the constant itself to ensure `totalSpending` is inferred as a number.
     const totalSpending: number = Object.values(spendingByCategory).reduce((sum: number, amount: number) => sum + amount, 0);

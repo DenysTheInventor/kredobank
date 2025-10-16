@@ -1,13 +1,11 @@
 import { GoogleGenAI } from "@google/genai";
-// Fix: Added .ts extension to the import path.
 import type { Transaction } from "../types.ts";
 
-// Fix: Per coding guidelines, initialize the SDK directly with `process.env.API_KEY`
-// and assume the key is available in the execution environment.
+// Fix: Per coding guidelines, the API key must be obtained exclusively from `process.env.API_KEY`.
+// The environment is assumed to be pre-configured with this variable.
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 export const getFinancialAdvice = async (prompt: string, transactions: Transaction[]): Promise<string> => {
-    // Per guidelines, assume API key is available. The try/catch block will handle any runtime errors.
     const model = 'gemini-2.5-flash';
 
     const transactionSummary = transactions
