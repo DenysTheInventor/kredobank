@@ -7,7 +7,7 @@ const AnalyticsChart: React.FC = () => {
     const expenses = transactions.filter(tx => tx.type === 'expense');
 
     // Fix: Explicitly type the initial value of the reduce function to ensure TypeScript correctly infers the type of `spendingByCategory`.
-    const spendingByCategory = expenses.reduce((acc: Record<string, number>, tx) => {
+    const spendingByCategory = expenses.reduce((acc, tx) => {
         // Simple conversion for demo
         let amountInUAH = tx.amount;
         if (tx.currency === 'USD') amountInUAH = tx.amount * 39;
@@ -18,11 +18,9 @@ const AnalyticsChart: React.FC = () => {
         return acc;
     }, {} as Record<string, number>);
 
-    // With `spendingByCategory` correctly typed, `totalSpending` is correctly inferred as a number.
-    const totalSpending: number = Object.values(spendingByCategory).reduce((sum: number, amount: number) => sum + amount, 0);
+    const totalSpending = Object.values(spendingByCategory).reduce((sum, amount) => sum + amount, 0);
 
-    // With `spendingByCategory` correctly typed, `categories` is correctly inferred as `[string, number][]`.
-    const categories: [string, number][] = Object.entries(spendingByCategory).sort((a, b) => b[1] - a[1]);
+    const categories = Object.entries(spendingByCategory).sort((a, b) => b[1] - a[1]);
     
     const colors = ['bg-purple-500', 'bg-indigo-500', 'bg-blue-500', 'bg-cyan-500', 'bg-teal-500', 'bg-green-500'];
 
