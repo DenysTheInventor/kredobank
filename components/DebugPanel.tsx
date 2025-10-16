@@ -38,11 +38,11 @@ const DebugPanel: React.FC<DebugPanelProps> = ({ onClose, onLogout }) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
-        // Fix: Explicitly type the accumulator 'acc' to ensure 'initialBalances' has the correct type.
+        // Fix: Explicitly type the initial value of the reduce function to ensure `initialBalances` has the correct type.
         const initialBalances = cards.reduce((acc: Record<string, string>, card) => {
             acc[card.id] = card.balance.toString();
             return acc;
-        }, {});
+        }, {} as Record<string, string>);
         setBalances(initialBalances);
     }, [cards]);
 

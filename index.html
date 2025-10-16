@@ -21,7 +21,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="KredoBank">
-    <link rel="apple-touch-icon" href="https://www.gstatic.com/android/keyboard/emojikitchen/20201001/u1f916/u1f916_u1f4b8.png">
+    <link rel="apple-touch-icon" href="/icon.svg">
 
     <style>
       body {
@@ -57,50 +57,9 @@
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
     <script>
-        // Simple service worker for caching the app shell
+        // Register the service worker from an external file
         if ('serviceWorker' in navigator) {
-            const swContent = `
-                const CACHE_NAME = 'kredobank-pwa-cache-v1';
-                const urlsToCache = [
-                    '/',
-                    '/index.html',
-                    '/manifest.json'
-                ];
-
-                self.addEventListener('install', event => {
-                    event.waitUntil(
-                        caches.open(CACHE_NAME)
-                            .then(cache => {
-                                console.log('Opened cache');
-                                return cache.addAll(urlsToCache);
-                            })
-                    );
-                });
-
-                self.addEventListener('fetch', event => {
-                    event.respondWith(
-                        caches.match(event.request)
-                            .then(response => {
-                                if (response) {
-                                    return response; // Serve from cache
-                                }
-                                return fetch(event.request); // Fetch from network
-                            })
-                    );
-                });
-
-                 self.addEventListener('push', event => {
-                    const data = event.data.json();
-                    self.registration.showNotification(data.title, {
-                        body: data.body,
-                        icon: 'https://www.gstatic.com/android/keyboard/emojikitchen/20201001/u1f916/u1f916_u1f4b8.png'
-                    });
-                });
-            `;
-            const swBlob = new Blob([swContent], { type: 'application/javascript' });
-            const swUrl = URL.createObjectURL(swBlob);
-
-            navigator.serviceWorker.register(swUrl)
+            navigator.serviceWorker.register('/sw.js')
                 .then(registration => {
                     console.log('ServiceWorker registration successful with scope: ', registration.scope);
                 }).catch(err => {

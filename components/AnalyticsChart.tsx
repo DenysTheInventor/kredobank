@@ -6,7 +6,7 @@ const AnalyticsChart: React.FC = () => {
     const { t, transactions } = useAppContext();
     const expenses = transactions.filter(tx => tx.type === 'expense');
 
-    // Fix: Explicitly type the accumulator 'acc' to ensure TypeScript correctly infers the return type of the reduce function.
+    // Fix: Explicitly type the initial value of the reduce function to ensure TypeScript correctly infers the type of `spendingByCategory`.
     const spendingByCategory = expenses.reduce((acc: Record<string, number>, tx) => {
         // Simple conversion for demo
         let amountInUAH = tx.amount;
@@ -16,12 +16,12 @@ const AnalyticsChart: React.FC = () => {
         
         acc[tx.category] = (acc[tx.category] || 0) + Math.abs(amountInUAH);
         return acc;
-    }, {});
+    }, {} as Record<string, number>);
 
-    // Fix: Add explicit types for reduce callback parameters and the constant itself to ensure `totalSpending` is inferred as a number.
+    // With `spendingByCategory` correctly typed, `totalSpending` is correctly inferred as a number.
     const totalSpending: number = Object.values(spendingByCategory).reduce((sum: number, amount: number) => sum + amount, 0);
 
-    // Fix: Sort categories by amount and explicitly type the result to ensure correct type inference for downstream operations.
+    // With `spendingByCategory` correctly typed, `categories` is correctly inferred as `[string, number][]`.
     const categories: [string, number][] = Object.entries(spendingByCategory).sort((a, b) => b[1] - a[1]);
     
     const colors = ['bg-purple-500', 'bg-indigo-500', 'bg-blue-500', 'bg-cyan-500', 'bg-teal-500', 'bg-green-500'];
