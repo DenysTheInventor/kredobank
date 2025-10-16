@@ -42,7 +42,7 @@ const DebugPanel: React.FC<DebugPanelProps> = ({ onClose, onLogout }) => {
         const initialBalances = cards.reduce((acc: Record<string, string>, card) => {
             acc[card.id] = card.balance.toString();
             return acc;
-        }, {} as Record<string, string>);
+        }, {});
         setBalances(initialBalances);
     }, [cards]);
 
