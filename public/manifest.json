@@ -1,9 +1,8 @@
-
 {
   "name": "KredoBank — sandbox",
   "short_name": "KredoBank",
   "description": "Симулятор мобільного банку — демо/тестовий режим",
-  "start_url": ".",
+  "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#0F1724",

@@ -6,9 +6,7 @@ const AnalyticsChart: React.FC = () => {
     const { t, transactions } = useAppContext();
     const expenses = transactions.filter(tx => tx.type === 'expense');
 
-    // Fix: Correctly type the initial value for the reduce function.
-    // This ensures `spendingByCategory` is inferred as Record<string, number>,
-    // which resolves all subsequent type errors in this component.
+    // Fix: Correctly type the initial value for the reduce accumulator. This resolves multiple downstream type errors by ensuring `spendingByCategory` is inferred as `Record<string, number>`.
     const spendingByCategory = expenses.reduce((acc, tx) => {
         // Simple conversion for demo
         let amountInUAH = tx.amount;
@@ -20,10 +18,8 @@ const AnalyticsChart: React.FC = () => {
         return acc;
     }, {} as Record<string, number>);
 
-    // With `spendingByCategory` correctly typed, type inference now works here.
     const totalSpending = Object.values(spendingByCategory).reduce((sum, amount) => sum + amount, 0);
 
-    // With `spendingByCategory` correctly typed, `categories` is correctly inferred as `[string, number][]`.
     const categories = Object.entries(spendingByCategory).sort((a, b) => b[1] - a[1]);
     
     const colors = ['bg-purple-500', 'bg-indigo-500', 'bg-blue-500', 'bg-cyan-500', 'bg-teal-500', 'bg-green-500'];
