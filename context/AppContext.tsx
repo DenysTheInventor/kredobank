@@ -44,11 +44,32 @@ export const AppContextProvider: React.FC<{ children: ReactNode }> = ({ children
     const [transactions, setTransactions] = useState<Transaction[]>(INITIAL_MOCK_TRANSACTIONS);
 
     useEffect(() => {
+        // Load theme from localStorage or system preference
         const storedTheme = localStorage.getItem('theme') as Theme;
         if (storedTheme) {
             setTheme(storedTheme);
         } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
             setTheme('dark');
+        }
+
+        // Load user data from localStorage
+        const storedUser = localStorage.getItem('kredo-user');
+        if (storedUser) {
+            try {
+                setUser(JSON.parse(storedUser));
+            } catch (e) {
+                console.error("Failed to parse user data from localStorage", e);
+            }
+        }
+
+        // Load card data from localStorage
+        const storedCards = localStorage.getItem('kredo-cards');
+        if (storedCards) {
+             try {
+                setCards(JSON.parse(storedCards));
+            } catch (e) {
+                console.error("Failed to parse cards data from localStorage", e);
+            }
         }
     }, []);
 
@@ -61,6 +82,14 @@ export const AppContextProvider: React.FC<{ children: ReactNode }> = ({ children
         localStorage.setItem('theme', theme);
     }, [theme]);
     
+    useEffect(() => {
+        localStorage.setItem('kredo-user', JSON.stringify(user));
+    }, [user]);
+
+    useEffect(() => {
+        localStorage.setItem('kredo-cards', JSON.stringify(cards));
+    }, [cards]);
+
     const toggleTheme = () => setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
     const t = (key: string) => getTranslation(lang, key as any);
     const updateUser = (updatedUser: Partial<User>) => setUser(prev => ({ ...prev, ...updatedUser }));

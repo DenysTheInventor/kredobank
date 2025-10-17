@@ -6,7 +6,8 @@ const AnalyticsChart: React.FC = () => {
     const { t, transactions } = useAppContext();
     const expenses = transactions.filter(tx => tx.type === 'expense');
 
-    // Fix: Correctly type the initial value for the reduce accumulator. This resolves multiple downstream type errors by ensuring `spendingByCategory` is inferred as `Record<string, number>`.
+    // Fix: Explicitly type the initial value for the reduce accumulator as Record<string, number>.
+    // This allows TypeScript to correctly infer the types of `spendingByCategory`, `totalSpending`, and `categories`, resolving all related type errors.
     const spendingByCategory = expenses.reduce((acc, tx) => {
         // Simple conversion for demo
         let amountInUAH = tx.amount;
