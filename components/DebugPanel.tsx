@@ -85,10 +85,11 @@ const DebugPanel: React.FC<DebugPanelProps> = ({ onClose, onLogout }) => {
     const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             const reader = new FileReader();
-            reader.onload = () => {
+            // Fix: Explicitly type the event in the onload handler to ensure type safety for `event.target.result`.
+            reader.onload = (event: ProgressEvent<FileReader>) => {
                 // Fix: Add a type guard to ensure reader.result is a string before calling setAvatar.
-                if (typeof reader.result === 'string') {
-                    setAvatar(reader.result);
+                if (typeof event.target?.result === 'string') {
+                    setAvatar(event.target.result);
                 }
             };
             reader.readAsDataURL(e.target.files[0]);

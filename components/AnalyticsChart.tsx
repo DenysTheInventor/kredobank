@@ -6,8 +6,8 @@ const AnalyticsChart: React.FC = () => {
     const { t, transactions } = useAppContext();
     const expenses = transactions.filter(tx => tx.type === 'expense');
 
-    // Fix: Explicitly type the initial value of the reduce function to ensure TypeScript correctly infers the type of `spendingByCategory`.
-    const spendingByCategory = expenses.reduce((acc, tx) => {
+    // Fix: Explicitly type the accumulator of the reduce function to ensure TypeScript correctly infers the type of `spendingByCategory`.
+    const spendingByCategory = expenses.reduce<Record<string, number>>((acc, tx) => {
         // Simple conversion for demo
         let amountInUAH = tx.amount;
         if (tx.currency === 'USD') amountInUAH = tx.amount * 39;
@@ -16,7 +16,7 @@ const AnalyticsChart: React.FC = () => {
         
         acc[tx.category] = (acc[tx.category] || 0) + Math.abs(amountInUAH);
         return acc;
-    }, {} as Record<string, number>);
+    }, {});
 
     const totalSpending = Object.values(spendingByCategory).reduce((sum, amount) => sum + amount, 0);
 
