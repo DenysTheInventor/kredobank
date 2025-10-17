@@ -38,11 +38,10 @@ const DebugPanel: React.FC<DebugPanelProps> = ({ onClose, onLogout }) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
-        // Fix: Explicitly type the initial value of the reduce function to ensure `initialBalances` has the correct type.
         const initialBalances = cards.reduce((acc: Record<string, string>, card) => {
             acc[card.id] = card.balance.toString();
             return acc;
-        }, {} as Record<string, string>);
+        }, {});
         setBalances(initialBalances);
     }, [cards]);
 
@@ -51,8 +50,9 @@ const DebugPanel: React.FC<DebugPanelProps> = ({ onClose, onLogout }) => {
     };
 
     const handleUpdateBalances = () => {
-        Object.entries(balances).forEach(([cardId, balanceStr]) => {
-            const newBalance = parseFloat(balanceStr);
+        // Fix: Use Object.keys to ensure cardId is correctly typed as a string.
+        Object.keys(balances).forEach(cardId => {
+            const newBalance = parseFloat(balances[cardId]);
             if (!isNaN(newBalance)) {
                 updateCardBalance(cardId, newBalance);
             }
@@ -85,9 +85,7 @@ const DebugPanel: React.FC<DebugPanelProps> = ({ onClose, onLogout }) => {
     const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             const reader = new FileReader();
-            // Fix: Explicitly type the event in the onload handler to ensure type safety for `event.target.result`.
             reader.onload = (event: ProgressEvent<FileReader>) => {
-                // Fix: Add a type guard to ensure reader.result is a string before calling setAvatar.
                 if (typeof event.target?.result === 'string') {
                     setAvatar(event.target.result);
                 }
