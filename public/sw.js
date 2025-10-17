@@ -18,13 +18,24 @@ self.addEventListener('install', event => {
 });
 
 self.addEventListener('fetch', event => {
+    // Network-first strategy for navigation requests (HTML pages).
+    // This prevents serving a stale index.html which might point to old, non-existent JS assets.
+    if (event.request.mode === 'navigate') {
+        event.respondWith(
+            fetch(event.request).catch(() => {
+                // If the network fails, fall back to the main cached page.
+                return caches.match('/');
+            })
+        );
+        return;
+    }
+
+    // Cache-first strategy for all other requests (assets like icons, etc.)
     event.respondWith(
         caches.match(event.request)
             .then(response => {
-                if (response) {
-                    return response; // Serve from cache
-                }
-                return fetch(event.request); // Fetch from network
+                // Return from cache or fetch from network
+                return response || fetch(event.request);
             })
     );
 });
