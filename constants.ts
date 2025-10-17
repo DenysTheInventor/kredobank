@@ -40,7 +40,7 @@ export const INITIAL_MOCK_CARDS: Card[] = [
     brand: 'Mastercard',
     last4: '9876',
     balance: 150000.00,
-    currency: 'THB',
+    currency: 'UAH',
     isPrimary: false,
     colorGradient: 'from-orange-500 to-amber-500',
     isBlocked: false,
@@ -82,7 +82,7 @@ export const generateMockTransactions = (): Transaction[] => {
         { desc: 'Power Buy', cat: 'Shopping', min: 1500, max: 60000 },
     ];
     
-    const thbCardId = 'card-3';
+    const anotherUahCardId = 'card-3';
     const uahCardId = 'card-1';
 
     let currentDate = new Date(endDate);
@@ -96,10 +96,10 @@ export const generateMockTransactions = (): Transaction[] => {
              const amount = Math.random() * (template.max - template.min) + template.min;
              transactions.push({
                 id: `tx-cafe-${currentDate.getTime()}-${Math.random()}`,
-                cardId: thbCardId,
+                cardId: anotherUahCardId,
                 description: template.desc,
                 amount: -parseFloat(amount.toFixed(2)),
-                currency: 'THB',
+                currency: 'UAH',
                 date: new Date(currentDate.getTime() - Math.random() * 1000 * 60 * 60 * 12).toISOString(),
                 type: 'expense',
                 category: template.cat,
@@ -112,10 +112,10 @@ export const generateMockTransactions = (): Transaction[] => {
              const amount = Math.random() * (template.max - template.min) + template.min;
              transactions.push({
                 id: `tx-shop-${currentDate.getTime()}-${i}`,
-                cardId: thbCardId,
+                cardId: anotherUahCardId,
                 description: template.desc,
                 amount: -parseFloat(amount.toFixed(2)),
-                currency: 'THB',
+                currency: 'UAH',
                 date: new Date(currentDate.getTime() - Math.random() * 1000 * 60 * 60 * 20).toISOString(),
                 type: 'expense',
                 category: template.cat,
@@ -128,10 +128,10 @@ export const generateMockTransactions = (): Transaction[] => {
              const amount = Math.random() * (template.max - template.min) + template.min;
              transactions.push({
                 id: `tx-tech-${currentDate.getTime()}`,
-                cardId: thbCardId,
+                cardId: anotherUahCardId,
                 description: template.desc,
                 amount: -parseFloat(amount.toFixed(2)),
-                currency: 'THB',
+                currency: 'UAH',
                 date: new Date(currentDate.getTime() - Math.random() * 1000 * 60 * 60 * 10).toISOString(),
                 type: 'expense',
                 category: template.cat,
