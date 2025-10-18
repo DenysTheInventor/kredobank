@@ -1,3 +1,4 @@
+
 import React from 'react';
 import type { Transaction } from '../types';
 import { useAppContext } from '../context/AppContext';
@@ -8,7 +9,7 @@ const AnalyticsChart: React.FC = () => {
 
     // Fix: Explicitly type the initial value for the reduce accumulator as Record<string, number>.
     // This allows TypeScript to correctly infer the types of `spendingByCategory`, `totalSpending`, and `categories`, resolving all related type errors.
-    const spendingByCategory = expenses.reduce((acc, tx) => {
+    const spendingByCategory = expenses.reduce((acc: Record<string, number>, tx) => {
         // Simple conversion for demo
         let amountInUAH = tx.amount;
         if (tx.currency === 'USD') amountInUAH = tx.amount * 39;
@@ -17,7 +18,7 @@ const AnalyticsChart: React.FC = () => {
         
         acc[tx.category] = (acc[tx.category] || 0) + Math.abs(amountInUAH);
         return acc;
-    }, {} as Record<string, number>);
+    }, {});
 
     const totalSpending = Object.values(spendingByCategory).reduce((sum, amount) => sum + amount, 0);
 

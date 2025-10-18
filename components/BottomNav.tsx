@@ -41,8 +41,11 @@ const BottomNav: React.FC = () => {
     };
 
     return (
-        <footer className="fixed bottom-0 left-0 right-0 max-w-md mx-auto h-16 bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg border-t border-slate-200 dark:border-slate-800">
-            <nav className="flex items-center justify-around h-full">
+        <footer
+            className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg border-t border-slate-200 dark:border-slate-800"
+            style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+        >
+            <nav className="flex items-center justify-around h-16">
                 {navItems.map(item => (
                     <NavItem key={item.screen} {...item} />
                 ))}

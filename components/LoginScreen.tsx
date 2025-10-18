@@ -85,21 +85,30 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
             <svg width="24" height="44" viewBox="0 0 24 44" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M2 2L22 22L2 42" stroke="#F97316" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
-            <h1 className="text-4xl font-bold text-blue-600 dark:text-blue-400">{t('loginTitle')}</h1>
+            <h1 className="text-4xl font-bold text-blue-600">{t('loginTitle')}</h1>
         </div>
     );
 
     if (isPinLoggingIn) {
         return (
-            <div className="flex flex-col items-center justify-center min-h-screen bg-slate-50 dark:bg-slate-900">
+            <div
+                className="flex flex-col items-center justify-center min-h-screen bg-slate-50"
+                style={{ paddingTop: 'env(safe-area-inset-top)', paddingBottom: 'env(safe-area-inset-bottom)' }}
+            >
                 <KredoBankLogo />
-                <Loader2 className="w-10 h-10 animate-spin text-blue-500 dark:text-blue-400 mt-8" />
+                <Loader2 className="w-10 h-10 animate-spin text-blue-500 mt-8" />
             </div>
         );
     }
 
     return (
-        <div className="flex flex-col items-center justify-between min-h-screen bg-slate-50 dark:bg-slate-900 p-8">
+        <div
+            className="flex flex-col items-center justify-between min-h-screen bg-slate-50 px-8"
+            style={{ 
+                paddingTop: `calc(2rem + env(safe-area-inset-top))`, 
+                paddingBottom: `calc(2rem + env(safe-area-inset-bottom))`
+            }}
+        >
              <style>{`
                 @keyframes shake {
                     10%, 90% { transform: translate3d(-1px, 0, 0); }
@@ -113,7 +122,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
             `}</style>
             <div className="w-full max-w-sm text-center mt-16">
                  <KredoBankLogo />
-                <p className="text-slate-600 dark:text-slate-400 mt-2">{t('loginSubtitle')}</p>
+                <p className="text-slate-600 mt-2">{t('loginSubtitle')}</p>
             </div>
             
             <div className="flex flex-col items-center space-y-4">
@@ -123,7 +132,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
                         <div
                             key={i}
                             className={`w-4 h-4 rounded-full transition-colors ${
-                                pin.length > i ? (isError ? 'bg-red-500' : 'bg-blue-500') : 'bg-slate-300 dark:bg-slate-600'
+                                pin.length > i ? (isError ? 'bg-red-500' : 'bg-blue-500') : 'bg-slate-300'
                             }`}
                         />
                     ))}
@@ -138,13 +147,13 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
                         <button
                             key={digit}
                             onClick={() => handlePinClick(digit)}
-                            className="text-3xl font-light p-4 rounded-full h-20 w-20 mx-auto bg-slate-200/50 dark:bg-slate-800/50 transition-colors active:bg-blue-200 dark:active:bg-blue-900"
+                            className="text-3xl font-light p-4 rounded-full h-20 w-20 mx-auto bg-slate-200/50 transition-colors active:bg-blue-200"
                         >
                             {digit}
                         </button>
                     ))}
                     {isAuthenticatorAvailable ? (
-                        <button onClick={handlePasskeyLogin} disabled={isLoading} className="text-blue-500 p-4 rounded-full h-20 w-20 mx-auto flex items-center justify-center transition-colors active:bg-blue-200 dark:active:bg-blue-900">
+                        <button onClick={handlePasskeyLogin} disabled={isLoading} className="text-blue-500 p-4 rounded-full h-20 w-20 mx-auto flex items-center justify-center transition-colors active:bg-blue-200">
                              {isLoading ? <Loader2 className="w-8 h-8 animate-spin"/> : <Fingerprint className="w-8 h-8" />}
                         </button>
                     ) : (
@@ -152,11 +161,11 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
                     )}
                      <button
                         onClick={() => handlePinClick('0')}
-                        className="text-3xl font-light p-4 rounded-full h-20 w-20 mx-auto bg-slate-200/50 dark:bg-slate-800/50 transition-colors active:bg-blue-200 dark:active:bg-blue-900"
+                        className="text-3xl font-light p-4 rounded-full h-20 w-20 mx-auto bg-slate-200/50 transition-colors active:bg-blue-200"
                     >
                         0
                     </button>
-                    <button onClick={handleDelete} className="p-4 rounded-full h-20 w-20 mx-auto flex items-center justify-center transition-colors active:bg-blue-200 dark:active:bg-blue-900">
+                    <button onClick={handleDelete} className="p-4 rounded-full h-20 w-20 mx-auto flex items-center justify-center transition-colors active:bg-blue-200">
                         <Delete className="w-8 h-8" />
                     </button>
                 </div>

@@ -7,7 +7,10 @@ import { Settings } from './icons.tsx';
 const Header: React.FC = () => {
     const { t, setActiveScreen, user } = useAppContext();
     return (
-        <header className="flex items-center justify-between p-4 bg-white/5 dark:bg-black/10 backdrop-blur-sm sticky top-0 z-10">
+        <header
+            className="flex items-center justify-between px-4 pb-4 bg-white/5 dark:bg-black/10 backdrop-blur-sm sticky top-0 z-10"
+            style={{ paddingTop: `calc(1rem + env(safe-area-inset-top))` }}
+        >
             <div className="flex items-center gap-3">
                 <img src={user.avatarUrl} alt="User Avatar" className="w-10 h-10 rounded-full border-2 border-purple-400 object-cover" />
                 <div>

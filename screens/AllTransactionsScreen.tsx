@@ -34,7 +34,10 @@ const AllTransactionsScreen: React.FC<AllTransactionsScreenProps> = ({ onClose }
     
     return (
         <div className="pb-20 flex flex-col h-screen">
-             <header className="flex items-center p-4 sticky top-0 bg-slate-50/80 dark:bg-slate-900/80 backdrop-blur-sm z-10 border-b dark:border-slate-800">
+             <header
+                className="flex items-center px-4 pb-4 sticky top-0 bg-slate-50/80 dark:bg-slate-900/80 backdrop-blur-sm z-10 border-b dark:border-slate-800"
+                style={{ paddingTop: `calc(1rem + env(safe-area-inset-top))` }}
+             >
                  <button 
                     onClick={onClose} 
                     className="p-2 mr-2 rounded-full text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"

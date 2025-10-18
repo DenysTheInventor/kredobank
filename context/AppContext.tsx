@@ -1,3 +1,4 @@
+
 import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
 import { getTranslation } from '../services/i18n.ts';
 import type { User, Card, Transaction, SavingsPot, PotTransaction } from '../types.ts';
@@ -41,7 +42,18 @@ export const AppContextProvider: React.FC<{ children: ReactNode }> = ({ children
     const [savingsPots, setSavingsPots] = useState<SavingsPot[]>(MOCK_SAVINGS_POTS);
     const [potTransactions, setPotTransactions] = useState<PotTransaction[]>(MOCK_POT_TRANSACTIONS);
     const [cards, setCards] = useState<Card[]>(INITIAL_MOCK_CARDS);
-    const [transactions, setTransactions] = useState<Transaction[]>(INITIAL_MOCK_TRANSACTIONS);
+    const [transactions, setTransactions] = useState<Transaction[]>(() => {
+        const storedTransactions = localStorage.getItem('kredo-transactions');
+        if (storedTransactions) {
+            try {
+                return JSON.parse(storedTransactions);
+            } catch (e) {
+                console.error("Failed to parse transactions data from localStorage", e);
+                return INITIAL_MOCK_TRANSACTIONS;
+            }
+        }
+        return INITIAL_MOCK_TRANSACTIONS;
+    });
 
     useEffect(() => {
         // Load theme from localStorage or system preference
@@ -90,6 +102,10 @@ export const AppContextProvider: React.FC<{ children: ReactNode }> = ({ children
         localStorage.setItem('kredo-cards', JSON.stringify(cards));
     }, [cards]);
 
+    useEffect(() => {
+        localStorage.setItem('kredo-transactions', JSON.stringify(transactions));
+    }, [transactions]);
+
     const toggleTheme = () => setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
     const t = (key: string) => getTranslation(lang, key as any);
     const updateUser = (updatedUser: Partial<User>) => setUser(prev => ({ ...prev, ...updatedUser }));
@@ -103,6 +119,7 @@ export const AppContextProvider: React.FC<{ children: ReactNode }> = ({ children
             ownerUserId: 'user-1',
             currentAmount: 0,
             status: 'active',
+            // Fix: Corrected typo `new new Date()` to `new Date()`.
             createdAt: new Date().toISOString(),
         };
         setSavingsPots(prev => [newPot, ...prev]);
